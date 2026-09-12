@@ -3,7 +3,7 @@
 /*
  * This file is part of the Composer plugin "console-style-kit".
  *
- * Copyright (C) 2025 Konrad Michalik <hej@konradmichalik.dev>
+ * Copyright (C) 2025-2026 Konrad Michalik <hej@konradmichalik.dev>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,7 +53,6 @@ use ConsoleStyleKit\Elements\TimelineElement;
 use ConsoleStyleKit\Enums\BadgeColor;
 use ConsoleStyleKit\Enums\BlockquoteType;
 use ConsoleStyleKit\Enums\LoadingCharacterSet;
-use ConsoleStyleKit\Enums\TimelineOrientation;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 

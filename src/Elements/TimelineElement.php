@@ -3,7 +3,7 @@
 /*
  * This file is part of the Composer plugin "console-style-kit".
  *
- * Copyright (C) 2025 Konrad Michalik <hej@konradmichalik.dev>
+ * Copyright (C) 2025-2026 Konrad Michalik <hej@konradmichalik.dev>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ class TimelineElement extends AbstractStyleElement
         if ($this->verboseOnly && !$this->style->isVerbose()) {
             return;
         }
-        
+
         if (empty($this->events)) {
             return;
         }
@@ -110,48 +110,49 @@ class TimelineElement extends AbstractStyleElement
 
         if (1 === $eventCount) {
             $this->renderSingleHorizontalEvent();
+
             return;
         }
 
         // Calculate available width and positions
         $availableWidth = max(50, $width - 10);
         $maxLabelLength = 12; // Truncate long labels
-        
+
         // Truncate and prepare labels
         $dates = [];
         $eventTexts = [];
         $maxDateLen = 0;
         $maxEventLen = 0;
-        
+
         foreach ($this->events as $event) {
             $date = substr($event['date'], 0, $maxLabelLength);
             $eventText = substr($event['event'], 0, $maxLabelLength);
-            
+
             $dates[] = $date;
             $eventTexts[] = $eventText;
             $maxDateLen = max($maxDateLen, strlen($date));
             $maxEventLen = max($maxEventLen, strlen($eventText));
         }
-        
+
         // Calculate spacing between points
         $totalContentWidth = max($maxDateLen, $maxEventLen) * $eventCount;
         $remainingWidth = $availableWidth - $totalContentWidth;
         $spacing = (int) max(5, $remainingWidth / ($eventCount - 1));
-        
+
         // Build timeline strings
         $dateRow = '';
         $timelineRow = '';
         $eventRow = '';
-        
-        for ($i = 0; $i < $eventCount; $i++) {
+
+        for ($i = 0; $i < $eventCount; ++$i) {
             $date = $dates[$i];
             $eventText = $eventTexts[$i];
-            
+
             // Add content
             $dateRow .= $date;
             $timelineRow .= $this->formatConnector();
             $eventRow .= $eventText;
-            
+
             // Add spacing and lines (except for last item)
             if ($i < $eventCount - 1) {
                 // Pad to align with next item
@@ -159,10 +160,10 @@ class TimelineElement extends AbstractStyleElement
                 $currentEventLen = strlen($eventText);
                 $nextDateLen = strlen($dates[$i + 1]);
                 $nextEventLen = strlen($eventTexts[$i + 1]);
-                
-                $dateSpacing = $spacing + (int)(($nextDateLen - $currentDateLen) / 2);
-                $eventSpacing = $spacing + (int)(($nextEventLen - $currentEventLen) / 2);
-                
+
+                $dateSpacing = $spacing + (int) (($nextDateLen - $currentDateLen) / 2);
+                $eventSpacing = $spacing + (int) (($nextEventLen - $currentEventLen) / 2);
+
                 $dateRow .= str_repeat(' ', max(1, $dateSpacing));
                 $timelineRow .= str_repeat($this->line, max(1, $spacing));
                 $eventRow .= str_repeat(' ', max(1, $eventSpacing));
@@ -179,7 +180,7 @@ class TimelineElement extends AbstractStyleElement
     {
         $date = $this->events[0]['date'];
         $event = $this->events[0]['event'];
-        
+
         // Simple single event display
         $this->style->writeln($date);
         $this->style->writeln($this->formatConnector());
@@ -188,7 +189,7 @@ class TimelineElement extends AbstractStyleElement
 
     private function formatConnector(): string
     {
-        return $this->connectorColor 
+        return $this->connectorColor
             ? "<fg={$this->connectorColor}>{$this->connector}</>"
             : $this->connector;
     }
@@ -198,11 +199,11 @@ class TimelineElement extends AbstractStyleElement
         foreach ($this->events as $index => $event) {
             $date = $event['date'];
             $eventText = $event['event'];
-            
+
             // Format: ● 2024-01-01 ─ Project Start
             $connector = $this->formatConnector();
             $this->style->writeln("{$connector} {$date} ─ {$eventText}");
-            
+
             // Add connecting line (except for last event)
             if ($index < count($this->events) - 1) {
                 $connectorLine = $this->connectorColor ? "<fg={$this->connectorColor}>│</>" : '│';
@@ -270,53 +271,54 @@ class TimelineElement extends AbstractStyleElement
             $this->renderHorizontalToString();
         }
         $output = ob_get_clean();
-        
+
         return $output ?: '';
     }
 
     private function renderHorizontalToString(): void
     {
         $eventCount = count($this->events);
-        
+
         if (1 === $eventCount) {
             $date = $this->events[0]['date'];
             $event = $this->events[0]['event'];
-            
-            echo $date . "\n";
-            echo $this->connector . "\n";
+
+            echo $date."\n";
+            echo $this->connector."\n";
             echo $event;
+
             return;
         }
 
         // Use same logic as render method
         $availableWidth = 60;
         $maxLabelLength = 12;
-        
+
         // Truncate and prepare labels
         $dates = [];
         $eventTexts = [];
-        
+
         foreach ($this->events as $event) {
             $dates[] = substr($event['date'], 0, $maxLabelLength);
             $eventTexts[] = substr($event['event'], 0, $maxLabelLength);
         }
-        
+
         // Calculate spacing
-        $spacing = max(5, (int)($availableWidth / $eventCount));
-        
+        $spacing = max(5, (int) ($availableWidth / $eventCount));
+
         // Build timeline strings
         $dateRow = '';
         $timelineRow = '';
         $eventRow = '';
-        
-        for ($i = 0; $i < $eventCount; $i++) {
+
+        for ($i = 0; $i < $eventCount; ++$i) {
             $date = $dates[$i];
             $eventText = $eventTexts[$i];
-            
+
             $dateRow .= $date;
             $timelineRow .= $this->connector;
             $eventRow .= $eventText;
-            
+
             if ($i < $eventCount - 1) {
                 $dateRow .= str_repeat(' ', max(1, $spacing - strlen($date)));
                 $timelineRow .= str_repeat($this->line, max(1, $spacing - 1));
@@ -324,8 +326,8 @@ class TimelineElement extends AbstractStyleElement
             }
         }
 
-        echo $dateRow . "\n";
-        echo $timelineRow . "\n"; 
+        echo $dateRow."\n";
+        echo $timelineRow."\n";
         echo $eventRow;
     }
 
@@ -335,16 +337,16 @@ class TimelineElement extends AbstractStyleElement
         foreach ($this->events as $index => $event) {
             $date = $event['date'];
             $eventText = $event['event'];
-            
+
             // Format: ● 2024-01-01 ─ Project Start
             $lines[] = "{$this->connector} {$date} ─ {$eventText}";
-            
+
             // Add connecting line (except for last event)
             if ($index < count($this->events) - 1) {
                 $lines[] = '│';
             }
         }
-        
+
         echo implode("\n", $lines);
     }
 }
