@@ -3,7 +3,7 @@
 /*
  * This file is part of the Composer plugin "console-style-kit".
  *
- * Copyright (C) 2025 Konrad Michalik <hej@konradmichalik.dev>
+ * Copyright (C) 2025-2026 Konrad Michalik <hej@konradmichalik.dev>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -103,10 +103,9 @@ class ConsoleStyleKit extends SymfonyStyle
         if (null !== $duration) {
             // Fixed duration mode - render and return element for potential chaining
             $element->render($duration);
-        } else {
-            // Manual mode - DON'T start automatically, let user call enableAutoUpdate() first
-            // The user can call ->start() or ->enableAutoUpdate() after this
         }
+        // Manual mode - DON'T start automatically, let user call enableAutoUpdate() first
+        // The user can call ->start() or ->enableAutoUpdate() after this
 
         return $element;
     }
